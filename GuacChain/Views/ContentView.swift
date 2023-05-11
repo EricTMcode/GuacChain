@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var qty = 0
+    
     var body: some View {
         VStack {
             HStack {
@@ -27,6 +29,22 @@ struct ContentView: View {
             
             Text("🌮")
                 .font(.system(size: 70))
+            
+            HStack {
+                Text("\(qty)")
+                    .font(.system(size: 48))
+                    .fontWeight(.heavy)
+                .frame(width: 70)
+                VStack(alignment: .leading) {
+                    Text("The Satoshi 'Taco' moto")
+                        .font(.title2)
+                    
+                    Stepper("", value: $qty)
+                        .labelsHidden()
+                }
+               
+            }
+            
             
             Spacer()
         }
