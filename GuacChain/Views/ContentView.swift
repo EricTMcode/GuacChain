@@ -21,7 +21,7 @@ enum Price: Double {
 }
 
 struct ContentView: View {
-    @StateObject var CurrencyVM = CurrencyViewModel()
+    @StateObject var currencyVM = CurrencyViewModel()
     @State private var tacoQty = 0
     @State private var burritoQty = 0
     @State private var chipsQty = 0
@@ -81,7 +81,12 @@ struct ContentView: View {
                 }
             }
             
+            Text("Total : \(currencyVM.usdPerBTC)")
+            
             Spacer()
+        }
+        .task {
+            await currencyVM.getData()
         }
     }
 }

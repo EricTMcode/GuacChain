@@ -13,6 +13,7 @@
 		075FD9C32A0D203000C762C3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075FD9C22A0D203000C762C3 /* Preview Assets.xcassets */; };
 		075FD9CE2A0D26CB00C762C3 /* QtySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075FD9CD2A0D26CB00C762C3 /* QtySelectionView.swift */; };
 		075FD9D02A0E658300C762C3 /* CurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075FD9CF2A0E658300C762C3 /* CurrencyViewModel.swift */; };
+		075FD9D62A0E6E0400C762C3 /* Currentprice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075FD9D52A0E6E0400C762C3 /* Currentprice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		075FD9C92A0D209700C762C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		075FD9CD2A0D26CB00C762C3 /* QtySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QtySelectionView.swift; sourceTree = "<group>"; };
 		075FD9CF2A0E658300C762C3 /* CurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewModel.swift; sourceTree = "<group>"; };
+		075FD9D52A0E6E0400C762C3 /* Currentprice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currentprice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 		075FD9CA2A0D20B600C762C3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				075FD9D52A0E6E0400C762C3 /* Currentprice.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				075FD9D02A0E658300C762C3 /* CurrencyViewModel.swift in Sources */,
 				075FD9BE2A0D202E00C762C3 /* ContentView.swift in Sources */,
 				075FD9BC2A0D202E00C762C3 /* GuacChainApp.swift in Sources */,
+				075FD9D62A0E6E0400C762C3 /* Currentprice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
