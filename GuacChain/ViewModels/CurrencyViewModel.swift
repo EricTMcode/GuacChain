@@ -23,11 +23,14 @@ class CurrencyViewModel: ObservableObject {
         }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            guard let currentprice = try? JSONDecoder().decode(Currentprice.self, from: data) else {
+            guard let result = try? JSONDecoder().decode(Result.self, from: data) else {
                 print("😡 JSON ERROR: Could not decode returned JSON data")
                 return
             }
-            self.usdPerBTC = currentprice.bpi.USD.rateFloat
+            self.usdPerBTC = result.bpi.USD.rateFloat
+            self.gbpPerBTC = result.bpi.GBP.rateFloat
+            self.eurPerBTC = result.bpi.EUR.rateFloat
+            print("One bitcoin is currently worth: $\(usdPerBTC), £\(gbpPerBTC), €\(eurPerBTC)  ")
         } catch {
             print("😡 ERROR: Could not use URL at \(urlString) to get data and response")
         }

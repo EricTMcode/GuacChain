@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Currentprice: Codable {
+struct Result: Codable {
     var bpi: Bpi
 }
 

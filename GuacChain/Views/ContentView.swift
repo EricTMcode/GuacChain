@@ -25,7 +25,7 @@ struct ContentView: View {
     @State private var tacoQty = 0
     @State private var burritoQty = 0
     @State private var chipsQty = 0
-    @State private var horchata$Qty = 0
+    @State private var horchataQty = 0
     @State private var currencySelection: Currency = .usd
     @State private var symbol = "$"
     
@@ -53,7 +53,7 @@ struct ContentView: View {
                 QtySelectionView(qty: $tacoQty, menuString: "The Satoshi 'Taco' Moto")
                 QtySelectionView(qty: $burritoQty, menuString: "Bitcoin Burrito")
                 QtySelectionView(qty: $chipsQty, menuString: "Crypto Chips")
-                QtySelectionView(qty: $horchata$Qty, menuString: "'No Bubble' Horchata'")
+                QtySelectionView(qty: $horchataQty, menuString: "'No Bubble' Horchata'")
                 
             }
             
@@ -77,11 +77,10 @@ struct ContentView: View {
                 
                 VStack(alignment: .leading) {
                     Text("₿ 0.00000")
-                    Text("\(symbol) 0.00")
+                    Text("\(symbol)\(calcBillInCurrency()) ")
                 }
             }
             
-            Text("Total : \(currencyVM.usdPerBTC)")
             
             Spacer()
         }
@@ -89,6 +88,22 @@ struct ContentView: View {
             await currencyVM.getData()
         }
     }
+    
+    func calcBillInCurrency() -> Double {
+        let tacoTotal = Price.taco.rawValue * Double(tacoQty)
+        let burritoTotal = Price.burrito.rawValue * Double(burritoQty)
+        let chipsTotal = Price.chips.rawValue * Double(chipsQty)
+        let horchataTotal = Price.horchata.rawValue * Double(horchataQty)
+        
+        let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
+        
+        return usdTotal
+    }
+    
+//    func calcBillInCurrency() -> Double {
+//        (Double(tacoQty) * Price.taco.rawValue) + (Double(burritoQty) * Price.burrito.rawValue) + (Double(chipsQty) * Price.chips.rawValue) + (Double(horchata$Qty) * Price.horchata.rawValue)
+//
+//    }
 }
 
 struct ContentView_Previews: PreviewProvider {
