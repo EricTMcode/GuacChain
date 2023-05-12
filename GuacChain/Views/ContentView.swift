@@ -25,7 +25,8 @@ struct ContentView: View {
     @State private var burritoQty = 0
     @State private var chipsQty = 0
     @State private var horchata$Qty = 0
-    @State private var currencySelection = Currency.usd
+    @State private var currencySelection: Currency = .usd
+    @State private var symbol = "$"
     
     var body: some View {
         VStack {
@@ -64,6 +65,14 @@ struct ContentView: View {
             }
             .pickerStyle(.segmented)
             .padding()
+            .onChange(of: currencySelection) { _ in
+                symbol = "\(currencySelection.rawValue.prefix(1))"
+                print(symbol)
+            }
+            
+            
+            
+            Spacer()
         }
     }
 }
