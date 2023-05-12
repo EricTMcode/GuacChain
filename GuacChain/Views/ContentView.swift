@@ -21,6 +21,7 @@ enum Price: Double {
 }
 
 struct ContentView: View {
+    @StateObject var CurrencyVM = CurrencyViewModel()
     @State private var tacoQty = 0
     @State private var burritoQty = 0
     @State private var chipsQty = 0
@@ -70,7 +71,15 @@ struct ContentView: View {
                 print(symbol)
             }
             
-            
+            HStack(alignment: .top) {
+                Text("Total:")
+                    .font(.title)
+                
+                VStack(alignment: .leading) {
+                    Text("₿ 0.00000")
+                    Text("\(symbol) 0.00")
+                }
+            }
             
             Spacer()
         }
