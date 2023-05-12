@@ -7,8 +7,25 @@
 
 import SwiftUI
 
+enum Currency: String, CaseIterable {
+    case usd = "$ USD"
+    case gbp = "£ GBP"
+    case eur = "€ EUR"
+}
+
+enum Price: Double {
+    case taco = 5.00
+    case burrito = 8.00
+    case chips = 3.00
+    case horchata = 2.00
+}
+
 struct ContentView: View {
-    @State private var qty = 0
+    @State private var tacoQty = 0
+    @State private var burritoQty = 0
+    @State private var chipsQty = 0
+    @State private var horchata$Qty = 0
+    @State private var currencySelection = Currency.usd
     
     var body: some View {
         VStack {
@@ -30,23 +47,23 @@ struct ContentView: View {
             Text("🌮")
                 .font(.system(size: 70))
             
-            HStack {
-                Text("\(qty)")
-                    .font(.system(size: 48))
-                    .fontWeight(.heavy)
-                .frame(width: 70)
-                VStack(alignment: .leading) {
-                    Text("The Satoshi 'Taco' moto")
-                        .font(.title2)
-                    
-                    Stepper("", value: $qty)
-                        .labelsHidden()
-                }
-               
+            VStack(alignment: .leading) {
+                QtySelectionView(qty: $tacoQty, menuString: "The Satoshi 'Taco' Moto")
+                QtySelectionView(qty: $burritoQty, menuString: "Bitcoin Burrito")
+                QtySelectionView(qty: $chipsQty, menuString: "Crypto Chips")
+                QtySelectionView(qty: $horchata$Qty, menuString: "'No Bubble' Horchata'")
+                
             }
             
-            
             Spacer()
+            
+            Picker("", selection: $currencySelection) {
+                ForEach(Currency.allCases, id: \.self) { currency in
+                    Text(currency.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding()
         }
     }
 }
