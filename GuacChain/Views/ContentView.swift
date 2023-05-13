@@ -76,7 +76,7 @@ struct ContentView: View {
                     .font(.title)
                 
                 VStack(alignment: .leading) {
-                    Text("₿ 0.00000")
+                    Text("₿ \(calcBillInBitcoin())")
                     Text("\(symbol)\(String(format:  "%.2f", calcBillInCurrency())) ")
                 }
             }
@@ -105,6 +105,17 @@ struct ContentView: View {
         case .eur:
             return usdTotal * (currencyVM.eurPerBTC / currencyVM.usdPerBTC)
         }
+    }
+    
+    func calcBillInBitcoin()  -> Double {
+        let tacoTotal = Price.taco.rawValue * Double(tacoQty)
+        let burritoTotal = Price.burrito.rawValue * Double(burritoQty)
+        let chipsTotal = Price.chips.rawValue * Double(chipsQty)
+        let horchataTotal = Price.horchata.rawValue * Double(horchataQty)
+        
+        let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
+        
+        return usdTotal / currencyVM.usdPerBTC
     }
     
 //    func calcBillInCurrency() -> Double {
