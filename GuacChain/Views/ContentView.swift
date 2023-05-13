@@ -7,27 +7,8 @@
 
 import SwiftUI
 
-enum Currency: String, CaseIterable {
-    case usd = "$ USD"
-    case gbp = "£ GBP"
-    case eur = "€ EUR"
-}
-
-enum Price: Double {
-    case taco = 5.00
-    case burrito = 8.00
-    case chips = 3.00
-    case horchata = 2.00
-}
-
 struct ContentView: View {
     @StateObject var currencyVM = CurrencyViewModel()
-    @State private var tacoQty = 0
-    @State private var burritoQty = 0
-    @State private var chipsQty = 0
-    @State private var horchataQty = 0
-    @State private var currencySelection: Currency = .usd
-    @State private var symbol = "$"
     
     var body: some View {
         VStack {
@@ -52,25 +33,24 @@ struct ContentView: View {
             Spacer()
             
             VStack(alignment: .leading) {
-                QtySelectionView(qty: $tacoQty, menuString: "The Satoshi 'Taco' Moto")
-                QtySelectionView(qty: $burritoQty, menuString: "Bitcoin Burrito")
-                QtySelectionView(qty: $chipsQty, menuString: "Crypto Chips")
-                QtySelectionView(qty: $horchataQty, menuString: "'No Bubble' Horchata'")
-                
+                QtySelectionView(qty: $currencyVM.tacoQty, menuString: "The Satoshi 'Taco' Moto")
+                QtySelectionView(qty: $currencyVM.burritoQty, menuString: "Bitcoin Burrito")
+                QtySelectionView(qty: $currencyVM.chipsQty, menuString: "Crypto Chips")
+                QtySelectionView(qty: $currencyVM.horchataQty, menuString: "'No Bubble' Horchata'")
             }
             
             Spacer()
             
-            Picker("", selection: $currencySelection) {
+            Picker("", selection: $currencyVM.currencySelection) {
                 ForEach(Currency.allCases, id: \.self) { currency in
                     Text(currency.rawValue)
                 }
             }
             .pickerStyle(.segmented)
             .padding()
-            .onChange(of: currencySelection) { _ in
-                symbol = "\(currencySelection.rawValue.prefix(1))"
-                print(symbol)
+            .onChange(of: currencyVM.currencySelection) { _ in
+                currencyVM.symbol = "\(currencyVM.currencySelection.rawValue.prefix(1))"
+                print(currencyVM.symbol)
             }
             
             HStack(alignment: .top) {
@@ -78,8 +58,8 @@ struct ContentView: View {
                     .font(.title)
                 
                 VStack(alignment: .leading) {
-                    Text("₿ \(calcBillInBitcoin(usdTotal: calcBill()))")
-                    Text("\(symbol)\(String(format:  "%.2f", calcBillInCurrency(usdTotal: calcBill()))) ")
+                    Text("₿ \(currencyVM.calcBillInBitcoin(usdTotal: currencyVM.calcBill()))")
+                    Text("\(currencyVM.symbol)\(String(format: "%.2f", currencyVM.calcBillInCurrency(usdTotal: currencyVM.calcBill()))) ")
                 }
             }
             
@@ -88,32 +68,6 @@ struct ContentView: View {
         .task {
             await currencyVM.getData()
         }
-    }
-    
-    func calcBill() -> Double {
-        let tacoTotal = Price.taco.rawValue * Double(tacoQty)
-        let burritoTotal = Price.burrito.rawValue * Double(burritoQty)
-        let chipsTotal = Price.chips.rawValue * Double(chipsQty)
-        let horchataTotal = Price.horchata.rawValue * Double(horchataQty)
-        
-        let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
-        
-        return usdTotal
-    }
-    
-    func calcBillInCurrency(usdTotal: Double) -> Double {
-        switch currencySelection {
-        case .usd:
-            return usdTotal
-        case .gbp:
-            return usdTotal * (currencyVM.gbpPerBTC / currencyVM.usdPerBTC)
-        case .eur:
-            return usdTotal * (currencyVM.eurPerBTC / currencyVM.usdPerBTC)
-        }
-    }
-    
-    func calcBillInBitcoin(usdTotal: Double)  -> Double {
-        usdTotal / currencyVM.usdPerBTC
     }
 }
 

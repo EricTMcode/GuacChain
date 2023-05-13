@@ -12,6 +12,12 @@ class CurrencyViewModel: ObservableObject {
     @Published var usdPerBTC: Double = 0.00
     @Published var gbpPerBTC: Double = 0.00
     @Published var eurPerBTC: Double = 0.00
+    @Published var tacoQty = 0
+    @Published var burritoQty = 0
+    @Published var chipsQty = 0
+    @Published var horchataQty = 0
+    @Published var currencySelection: Currency = .usd
+    @Published var symbol = "$"
     
     var urlString = "https://api.coindesk.com/v1/bpi/currentprice.json"
     
@@ -34,5 +40,31 @@ class CurrencyViewModel: ObservableObject {
         } catch {
             print("😡 ERROR: Could not use URL at \(urlString) to get data and response")
         }
+    }
+    
+    func calcBill() -> Double {
+        let tacoTotal = Price.taco.rawValue * Double(tacoQty)
+        let burritoTotal = Price.burrito.rawValue * Double(burritoQty)
+        let chipsTotal = Price.chips.rawValue * Double(chipsQty)
+        let horchataTotal = Price.horchata.rawValue * Double(horchataQty)
+        
+        let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
+        
+        return usdTotal
+    }
+    
+    func calcBillInCurrency(usdTotal: Double) -> Double {
+        switch currencySelection {
+        case .usd:
+            return usdTotal
+        case .gbp:
+            return usdTotal * (gbpPerBTC / usdPerBTC)
+        case .eur:
+            return usdTotal * (eurPerBTC / usdPerBTC)
+        }
+    }
+    
+    func calcBillInBitcoin(usdTotal: Double)  -> Double {
+        usdTotal / usdPerBTC
     }
 }
