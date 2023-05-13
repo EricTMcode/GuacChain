@@ -77,7 +77,7 @@ struct ContentView: View {
                 
                 VStack(alignment: .leading) {
                     Text("₿ 0.00000")
-                    Text("\(symbol)\(calcBillInCurrency()) ")
+                    Text("\(symbol)\(String(format:  "%.2f", calcBillInCurrency())) ")
                 }
             }
             
