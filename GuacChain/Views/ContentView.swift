@@ -97,7 +97,14 @@ struct ContentView: View {
         
         let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
         
-        return usdTotal
+        switch currencySelection {
+        case .usd:
+            return usdTotal
+        case .gbp:
+            return usdTotal * (currencyVM.gbpPerBTC / currencyVM.usdPerBTC)
+        case .eur:
+            return usdTotal * (currencyVM.eurPerBTC / currencyVM.usdPerBTC)
+        }
     }
     
 //    func calcBillInCurrency() -> Double {
