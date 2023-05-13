@@ -45,9 +45,11 @@ struct ContentView: View {
             Text("The World's Tastiest Tacos - But We Only Accept Bitcoin")
                 .font(Font.custom("Papyrus", size: 20))
                 .multilineTextAlignment(.center)
-            
+                .padding(.bottom, 1)
             Text("🌮")
                 .font(.system(size: 70))
+            
+            Spacer()
             
             VStack(alignment: .leading) {
                 QtySelectionView(qty: $tacoQty, menuString: "The Satoshi 'Taco' Moto")
@@ -76,11 +78,10 @@ struct ContentView: View {
                     .font(.title)
                 
                 VStack(alignment: .leading) {
-                    Text("₿ \(calcBillInBitcoin())")
-                    Text("\(symbol)\(String(format:  "%.2f", calcBillInCurrency())) ")
+                    Text("₿ \(calcBillInBitcoin(usdTotal: calcBill()))")
+                    Text("\(symbol)\(String(format:  "%.2f", calcBillInCurrency(usdTotal: calcBill()))) ")
                 }
             }
-            
             
             Spacer()
         }
@@ -89,7 +90,7 @@ struct ContentView: View {
         }
     }
     
-    func calcBillInCurrency() -> Double {
+    func calcBill() -> Double {
         let tacoTotal = Price.taco.rawValue * Double(tacoQty)
         let burritoTotal = Price.burrito.rawValue * Double(burritoQty)
         let chipsTotal = Price.chips.rawValue * Double(chipsQty)
@@ -97,6 +98,10 @@ struct ContentView: View {
         
         let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
         
+        return usdTotal
+    }
+    
+    func calcBillInCurrency(usdTotal: Double) -> Double {
         switch currencySelection {
         case .usd:
             return usdTotal
@@ -107,21 +112,9 @@ struct ContentView: View {
         }
     }
     
-    func calcBillInBitcoin()  -> Double {
-        let tacoTotal = Price.taco.rawValue * Double(tacoQty)
-        let burritoTotal = Price.burrito.rawValue * Double(burritoQty)
-        let chipsTotal = Price.chips.rawValue * Double(chipsQty)
-        let horchataTotal = Price.horchata.rawValue * Double(horchataQty)
-        
-        let usdTotal = tacoTotal + burritoTotal + chipsTotal + horchataTotal
-        
-        return usdTotal / currencyVM.usdPerBTC
+    func calcBillInBitcoin(usdTotal: Double)  -> Double {
+        usdTotal / currencyVM.usdPerBTC
     }
-    
-//    func calcBillInCurrency() -> Double {
-//        (Double(tacoQty) * Price.taco.rawValue) + (Double(burritoQty) * Price.burrito.rawValue) + (Double(chipsQty) * Price.chips.rawValue) + (Double(horchata$Qty) * Price.horchata.rawValue)
-//
-//    }
 }
 
 struct ContentView_Previews: PreviewProvider {
