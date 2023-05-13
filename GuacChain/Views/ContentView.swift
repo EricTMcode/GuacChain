@@ -12,6 +12,23 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            titleView
+            Spacer()
+            qtySelectionView
+            Spacer()
+            pickerView
+            totalView
+            Spacer()
+        }
+        .task {
+            await currencyVM.getData()
+        }
+    }
+}
+
+extension ContentView {
+    private var titleView: some View {
+        Group {
             HStack {
                 Text("Guac")
                     .foregroundColor(.green)
@@ -29,44 +46,41 @@ struct ContentView: View {
                 .padding(.bottom, 1)
             Text("🌮")
                 .font(.system(size: 70))
-            
-            Spacer()
+        }
+    }
+    
+    private var qtySelectionView: some View {
+        VStack(alignment: .leading) {
+            QtySelectionView(qty: $currencyVM.tacoQty, menuString: "The Satoshi 'Taco' Moto")
+            QtySelectionView(qty: $currencyVM.burritoQty, menuString: "Bitcoin Burrito")
+            QtySelectionView(qty: $currencyVM.chipsQty, menuString: "Crypto Chips")
+            QtySelectionView(qty: $currencyVM.horchataQty, menuString: "'No Bubble' Horchata'")
+        }
+    }
+    
+    private var pickerView: some View {
+        Picker("", selection: $currencyVM.currencySelection) {
+            ForEach(Currency.allCases, id: \.self) { currency in
+                Text(currency.rawValue)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding()
+        .onChange(of: currencyVM.currencySelection) { _ in
+            currencyVM.symbol = "\(currencyVM.currencySelection.rawValue.prefix(1))"
+            print(currencyVM.symbol)
+        }
+    }
+    
+    private var totalView: some View {
+        HStack(alignment: .top) {
+            Text("Total:")
+                .font(.title)
             
             VStack(alignment: .leading) {
-                QtySelectionView(qty: $currencyVM.tacoQty, menuString: "The Satoshi 'Taco' Moto")
-                QtySelectionView(qty: $currencyVM.burritoQty, menuString: "Bitcoin Burrito")
-                QtySelectionView(qty: $currencyVM.chipsQty, menuString: "Crypto Chips")
-                QtySelectionView(qty: $currencyVM.horchataQty, menuString: "'No Bubble' Horchata'")
+                Text("₿ \(currencyVM.calcBillInBitcoin(usdTotal: currencyVM.calcBill()))")
+                Text("\(currencyVM.symbol)\(String(format: "%.2f", currencyVM.calcBillInCurrency(usdTotal: currencyVM.calcBill()))) ")
             }
-            
-            Spacer()
-            
-            Picker("", selection: $currencyVM.currencySelection) {
-                ForEach(Currency.allCases, id: \.self) { currency in
-                    Text(currency.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding()
-            .onChange(of: currencyVM.currencySelection) { _ in
-                currencyVM.symbol = "\(currencyVM.currencySelection.rawValue.prefix(1))"
-                print(currencyVM.symbol)
-            }
-            
-            HStack(alignment: .top) {
-                Text("Total:")
-                    .font(.title)
-                
-                VStack(alignment: .leading) {
-                    Text("₿ \(currencyVM.calcBillInBitcoin(usdTotal: currencyVM.calcBill()))")
-                    Text("\(currencyVM.symbol)\(String(format: "%.2f", currencyVM.calcBillInCurrency(usdTotal: currencyVM.calcBill()))) ")
-                }
-            }
-            
-            Spacer()
-        }
-        .task {
-            await currencyVM.getData()
         }
     }
 }
